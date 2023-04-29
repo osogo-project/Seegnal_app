@@ -120,7 +120,6 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         // 카메라 화면 출력 뷰 초기화
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
-//        previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         
         // 이미지뷰 초기화
@@ -257,6 +256,14 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
         imageView.tag = 999
         self.view.addSubview(imageView)
         
+        if let image = imageView.image {
+            let imageRequest = ImageRequest(image: image)
+            apiCall(imageRequest)
+        } else {
+            // 이미지가 nil 일 때, 처리할 코드
+            // 경고창 띄울 예정
+            print("There is Error Try Again")
+        }
         // 카메라 정지
         DispatchQueue.global().async {
             self.session.stopRunning()
@@ -273,6 +280,20 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
                         capturedImageView.removeFromSuperview()
                     }
                 }
+            }
+        }
+    }
+}
+
+extension MainViewController {
+    
+    private func apiCall(_ imageRequest: ImageRequest) {
+        APIClient.shared.main.requestImage(imageRequest) { [weak self] result in
+            switch result {
+            case .success(let tts):
+                print(tts)
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
             }
         }
     }

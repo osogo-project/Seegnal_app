@@ -52,7 +52,7 @@ class APIClient {
                 
                 do {
                     let decoder = JSONDecoder()
-                    let imageResponse = try decoder.decode(LoginResponse.self, from: data)
+                    let imageResponse = try decoder.decode(ImageResponse.self, from: data)
                     DispatchQueue.main.async {
                         completion(.success(imageResponse))
                     }
@@ -65,4 +65,7 @@ class APIClient {
             task.resume()
         }
     }
+        
+    let main = Main()
 }
+
