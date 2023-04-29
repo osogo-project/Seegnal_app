@@ -49,7 +49,6 @@ class APIClient {
                     }
                     return
                 }
-                
                 do {
                     let decoder = JSONDecoder()
                     let imageResponse = try decoder.decode(ImageResponse.self, from: data)

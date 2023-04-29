@@ -37,6 +37,7 @@ class InfoViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "시각 장애인을 위한 Voice Over 설명이 들어갈 뷰입니다."
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

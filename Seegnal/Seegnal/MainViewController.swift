@@ -65,7 +65,6 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath"), for: .normal)
         button.tintColor = .white
         button.frame = CGRect(x: view.bounds.width - 70, y: view.bounds.height - 90, width: 40, height: 40)
-
         button.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
         return button
     }()
@@ -87,6 +86,7 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         button.setImage(UIImage(systemName: "info.circle"), for: .normal)
         button.frame = CGRect(x: view.bounds.width - 40, y: 60, width: 30, height: 30)
         button.tintColor = .white
+        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         return button
     }()
     // MARK: - configure
@@ -94,7 +94,7 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     func configure() {
         view.addSubview(captureButton)
         view.addSubview(flashbutton)
-        view.addSubview(zoomButton)
+//        view.addSubview(zoomButton)
         view.addSubview(switchButton)
         view.addSubview(infoButton)
     }
@@ -146,6 +146,88 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         // pinchGesture
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         view.addGestureRecognizer(pinchGesture)
+    }
+
+    // 카메라 캡쳐 델리게이트 메서드
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // 카메라 화면 캡쳐 데이터 처리
+    }
+}
+
+extension MainViewController: AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        // 사진 데이터 처리
+        guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
+            print("Error: failed to get image data")
+            return
+        }
+        // 캡처한 이미지를 미리보기로 보여주는 뷰에 표시
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFit
+        imageView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        imageView.tag = 999
+        self.view.addSubview(imageView)
+        
+        if let image = imageView.image {
+            let imageRequest = ImageRequest(image: image)
+            apiCall(imageRequest)
+        } else {
+            // 이미지가 nil 일 때, 처리할 코드
+            // 경고창 띄울 예정
+            print("There is Error Try Again")
+        }
+        // 카메라 정지
+        DispatchQueue.global().async {
+            self.session.stopRunning()
+            
+            // 5초 후 카메라 다시 작동
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                DispatchQueue.global().async {
+                    self.session.startRunning()
+                }
+                
+                // 캡처된 이미지 제거
+                DispatchQueue.main.async {
+                    if let capturedImageView = self.view.viewWithTag(999) {
+                        capturedImageView.removeFromSuperview()
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// MARK: - Objc function
+
+extension MainViewController {
+    
+    // 이미지 캡쳐 메서드
+    @objc func captureImage() {
+        
+        // photoSettings 객체 생성
+        let photoSettings = AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)])
+
+        // photoOutput 객체의 capturePhoto 메서드를 호출하여 캡처 수행
+        photoOutput.capturePhoto(with: photoSettings, delegate: self)
+    }
+    
+    // pinchGesture 지원
+    @objc func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
+        guard let device = captureDevice else { return }
+
+        do {
+            try device.lockForConfiguration()
+
+            // 줌 인/아웃 비율 계산
+            let zoomScale = min(max(CGFloat(gestureRecognizer.scale), device.minAvailableVideoZoomFactor), device.maxAvailableVideoZoomFactor)
+
+            device.videoZoomFactor = CGFloat(zoomScale)
+            device.unlockForConfiguration()
+
+        } catch {
+            print("Error: Unable to lock device for configuration")
+        }
     }
     
     @objc func zoomIn() {
@@ -204,86 +286,15 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             print("Error switching camera: \(error)")
         }
     }
-
-
-    // 카메라 캡쳐 델리게이트 메서드
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        // 카메라 화면 캡쳐 데이터 처리
-    }
-
-    // 이미지 캡쳐 메서드
-    @objc func captureImage() {
-        
-        // photoSettings 객체 생성
-        let photoSettings = AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)])
-
-        // photoOutput 객체의 capturePhoto 메서드를 호출하여 캡처 수행
-        photoOutput.capturePhoto(with: photoSettings, delegate: self)
-    }
     
-    // pinchGesture 지원
-    @objc func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
-        guard let device = captureDevice else { return }
-
-        do {
-            try device.lockForConfiguration()
-
-            // 줌 인/아웃 비율 계산
-            let zoomScale = min(max(CGFloat(gestureRecognizer.scale), device.minAvailableVideoZoomFactor), device.maxAvailableVideoZoomFactor)
-
-            device.videoZoomFactor = CGFloat(zoomScale)
-            device.unlockForConfiguration()
-
-        } catch {
-            print("Error: Unable to lock device for configuration")
-        }
-    }
-
-
-}
-
-extension MainViewController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        // 사진 데이터 처리
-        guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
-            print("Error: failed to get image data")
-            return
-        }
-        // 캡처한 이미지를 미리보기로 보여주는 뷰에 표시
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        imageView.tag = 999
-        self.view.addSubview(imageView)
-        
-        if let image = imageView.image {
-            let imageRequest = ImageRequest(image: image)
-            apiCall(imageRequest)
-        } else {
-            // 이미지가 nil 일 때, 처리할 코드
-            // 경고창 띄울 예정
-            print("There is Error Try Again")
-        }
-        // 카메라 정지
-        DispatchQueue.global().async {
-            self.session.stopRunning()
-            
-            // 5초 후 카메라 다시 작동
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                DispatchQueue.global().async {
-                    self.session.startRunning()
-                }
-                
-                // 캡처된 이미지 제거
-                DispatchQueue.main.async {
-                    if let capturedImageView = self.view.viewWithTag(999) {
-                        capturedImageView.removeFromSuperview()
-                    }
-                }
-            }
-        }
+    @objc func infoButtonTapped() {
+        let infoVC = InfoViewController()
+        self.present(infoVC, animated: true)
     }
 }
+
+
+// MARK: - API call
 
 extension MainViewController {
     
