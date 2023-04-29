@@ -81,6 +81,14 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         button.addTarget(self, action: #selector(captureImage), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var infoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
+        button.frame = CGRect(x: view.bounds.width - 40, y: 60, width: 30, height: 30)
+        button.tintColor = .white
+        return button
+    }()
     // MARK: - configure
     
     func configure() {
@@ -88,6 +96,7 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         view.addSubview(flashbutton)
         view.addSubview(zoomButton)
         view.addSubview(switchButton)
+        view.addSubview(infoButton)
     }
     
     func setUpCamera() {
