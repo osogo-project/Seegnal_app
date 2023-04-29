@@ -18,6 +18,7 @@
 		783F3A2529EA64F300D8424D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783F3A2429EA64F300D8424D /* AVFoundation.framework */; };
 		789ADAC229FCFE0100D62292 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC129FCFE0100D62292 /* APIClient.swift */; };
 		789ADAC429FD000800D62292 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC329FD000800D62292 /* ImageModel.swift */; };
+		789ADAC629FD030E00D62292 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC529FD030E00D62292 /* InfoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		783F3A2429EA64F300D8424D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		789ADAC129FCFE0100D62292 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		789ADAC329FD000800D62292 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
+		789ADAC529FD030E00D62292 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				783F39F329EA5F3A00D8424D /* AppDelegate.swift */,
 				783F39F529EA5F3A00D8424D /* SceneDelegate.swift */,
 				783F39F729EA5F3A00D8424D /* MainViewController.swift */,
+				789ADAC529FD030E00D62292 /* InfoViewController.swift */,
 				789ADAC129FCFE0100D62292 /* APIClient.swift */,
 				789ADAC329FD000800D62292 /* ImageModel.swift */,
 				783F39FC29EA5F3A00D8424D /* Assets.xcassets */,
@@ -276,6 +279,7 @@
 				789ADAC429FD000800D62292 /* ImageModel.swift in Sources */,
 				783F39F429EA5F3A00D8424D /* AppDelegate.swift in Sources */,
 				783F39F629EA5F3A00D8424D /* SceneDelegate.swift in Sources */,
+				789ADAC629FD030E00D62292 /* InfoViewController.swift in Sources */,
 				789ADAC229FCFE0100D62292 /* APIClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
