@@ -10,18 +10,18 @@ import UIKit
 
 // 이미지 전송 Encode용
 struct ImageRequest: Codable {
-    let imageData: Data
+    let image: Data
     
     init(image: UIImage) {
-        self.imageData = image.jpegData(compressionQuality: 0.8)!
+        self.image = image.jpegData(compressionQuality: 0.8)!
     }
     
     func getImage() -> UIImage? {
-        return UIImage(data: self.imageData)
+        return UIImage(data: self.image)
     }
 }
 
 // 이미지 전송 후 Decode용
 struct ImageResponse: Codable {
-    let ttsText: String
+    let text: String
 }
