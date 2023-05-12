@@ -13,6 +13,7 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCamera()
+        setUpTTS()
         configure()
     }
 
@@ -36,6 +37,10 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     var imageView: UIImageView!
     // 카메라 캡쳐 결과
     var photoOutput: AVCapturePhotoOutput!
+    // TTS Speaker
+    var synthesizer: AVSpeechSynthesizer!
+    // TTS String
+//    var utterance: AVSpeechUtterance!
     
     // MARK: - Buttons
     
@@ -146,6 +151,10 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         // pinchGesture
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         view.addGestureRecognizer(pinchGesture)
+    }
+    
+    func setUpTTS() {
+        self.synthesizer = AVSpeechSynthesizer()
     }
 
     // 카메라 캡쳐 델리게이트 메서드
@@ -302,11 +311,12 @@ extension MainViewController {
         APIClient.shared.imageCaptioning.requestImage(imageRequest) { [weak self] result in
             switch result {
             case .success(let tts):
-                print(tts)
-                let alertController = UIAlertController(title: "경고", message: "\(tts)", preferredStyle: .alert)
+                let alertController = UIAlertController(title: "경고", message: "\(tts.text)", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
                 alertController.addAction(cancelAction)
                 DispatchQueue.main.async {
+                    let utterance = AVSpeechUtterance(string: tts.text)
+                    self?.synthesizer.speak(utterance)
                     self?.present(alertController, animated: true)
                 }
                 
