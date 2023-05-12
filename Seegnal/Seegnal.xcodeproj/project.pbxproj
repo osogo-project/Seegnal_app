@@ -86,6 +86,7 @@
 		783F39E729EA5F3A00D8424D = {
 			isa = PBXGroup;
 			children = (
+				78BF0EB42A0E1D7E00A35A7C /* Networking */,
 				783F39F229EA5F3A00D8424D /* Seegnal */,
 				783F3A0929EA5F3A00D8424D /* SeegnalTests */,
 				783F3A1329EA5F3A00D8424D /* SeegnalUITests */,
@@ -143,6 +144,37 @@
 				783F3A2429EA64F300D8424D /* AVFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		78BF0EB42A0E1D7E00A35A7C /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				78BF0EB62A0E1E5D00A35A7C /* NetworkServiceProtocol */,
+				78BF0EB52A0E1E4D00A35A7C /* NetworkService */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		78BF0EB52A0E1E4D00A35A7C /* NetworkService */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NetworkService;
+			sourceTree = "<group>";
+		};
+		78BF0EB62A0E1E5D00A35A7C /* NetworkServiceProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				78BF0EB72A0E1E6B00A35A7C /* Utils */,
+			);
+			path = NetworkServiceProtocol;
+			sourceTree = "<group>";
+		};
+		78BF0EB72A0E1E6B00A35A7C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
