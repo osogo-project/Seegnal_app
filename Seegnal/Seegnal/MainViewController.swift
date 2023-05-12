@@ -299,13 +299,17 @@ extension MainViewController {
 extension MainViewController {
     
     private func apiCall(_ imageRequest: ImageRequest) {
-        APIClient.shared.main.requestImage(imageRequest) { [weak self] result in
+        APIClient.shared.imageCaptioning.requestImage(imageRequest) { [weak self] result in
             switch result {
             case .success(let tts):
-                let alertController = UIAlertController(title: "경고", message: "\(tts.text)", preferredStyle: .alert)
+                print(tts)
+                let alertController = UIAlertController(title: "경고", message: "\(tts)", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
                 alertController.addAction(cancelAction)
-                self?.present(alertController, animated: true)
+                DispatchQueue.main.async {
+                    self?.present(alertController, animated: true)
+                }
+                
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
                 let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
@@ -316,3 +320,4 @@ extension MainViewController {
         }
     }
 }
+

@@ -14,11 +14,9 @@ public enum Result<Value> {
 
 public struct Dispatcher: Dispatchable {
     
-    public var components: URLComponents?
     public var session: URLSessionProtocol
     
-    public init(components: URLComponents?, session: URLSessionProtocol) {
-        self.components = components
+    public init(session: URLSessionProtocol) {
         self.session = session
     }
     

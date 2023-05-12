@@ -13,21 +13,13 @@ class APIClient {
     
     let baseURL = "https://seegnal.pythonanywhere.com/api/v1/caption"
     
-    private init() {}
-    
-    
     class ImageCaptioning {
         
-        let requestMaker: RequestMakable
+        let requestMaker = RequestMaker()
         var jsonParser = JsonParser()
-        let dispatcher: Dispatchable
-        
-        public init(dispatcher: Dispatchable, requestMaker: RequestMakable) {
-            self.dispatcher = dispatcher
-            self.requestMaker = requestMaker
-        }
-        
-        func requestImage(_ imageRequest: ImageRequest, completion: @escaping (Result<Data>) -> Void) {
+        let dispatcher = Dispatcher(session: URLSession.shared)
+
+        func requestImage(_ imageRequest: ImageRequest, completion: @escaping (Result<ImageResponse>) -> Void) {
             
             guard let url = URL(string: APIClient.shared.baseURL) else { return }
             
@@ -55,7 +47,11 @@ class APIClient {
                 case .failure(let error):
                     completion(.failure(error))
                 case .success(let data):
-                    completion(.success(data))
+                    guard let text = self.jsonParser.extractDecodedJsonData(decodeType: ImageResponse.self, binaryData: data) else {
+                        completion(.failure(APIError.jsonParsingFailure))
+                        return
+                    }
+                    completion(.success(text))
                 }
                 
             }

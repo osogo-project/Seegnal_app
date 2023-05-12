@@ -9,8 +9,6 @@ import Foundation
 
 public protocol Dispatchable {
     
-    var components: URLComponents?{ get }
-    
     var session: URLSessionProtocol { get }
     
     func dispatch(request: URLRequest,
