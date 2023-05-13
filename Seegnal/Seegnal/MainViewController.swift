@@ -24,6 +24,10 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             self.session.stopRunning()
         }
     }
+    // MARK: - Timer For Peformance Test
+    
+    var startTime: DispatchTime!
+    var endTime: DispatchTime!
     
     // MARK: - Variables
     
@@ -39,8 +43,6 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     var photoOutput: AVCapturePhotoOutput!
     // TTS Speaker
     var synthesizer: AVSpeechSynthesizer!
-    // TTS String
-//    var utterance: AVSpeechUtterance!
     
     // MARK: - Buttons
     
@@ -139,7 +141,9 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         
         // 결과 출력
         photoOutput = AVCapturePhotoOutput()
+        
         session.addOutput(photoOutput)
+        let availableFormats = photoOutput.availablePhotoCodecTypes
         
         // 카메라 시작
         DispatchQueue.global().async {
@@ -177,9 +181,17 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
         imageView.tag = 999
         self.view.addSubview(imageView)
         
+
+        
         if let image = imageView.image {
+            //        if let imageData = image.jpegData(compressionQuality: 0.5) {
+            //            let imageRequest = ImageRequest(image: image)
+            //            apiCall(imageRequest)
+            //            self.startTime = DispatchTime.now()
+            //        }
             let imageRequest = ImageRequest(image: image)
             apiCall(imageRequest)
+            self.startTime = DispatchTime.now()
         } else {
             // 이미지가 nil 일 때, 처리할 코드
             // 경고창 띄울 예정
@@ -188,20 +200,6 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
         // 카메라 정지
         DispatchQueue.global().async {
             self.session.stopRunning()
-            
-            // 5초 후 카메라 다시 작동
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                DispatchQueue.global().async {
-                    self.session.startRunning()
-                }
-                
-                // 캡처된 이미지 제거
-                DispatchQueue.main.async {
-                    if let capturedImageView = self.view.viewWithTag(999) {
-                        capturedImageView.removeFromSuperview()
-                    }
-                }
-            }
         }
     }
 }
@@ -215,7 +213,8 @@ extension MainViewController {
     @objc func captureImage() {
         
         // photoSettings 객체 생성
-        let photoSettings = AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)])
+        // [875704422->6.3, 875704438->6.8, 1111970369->6.9]
+        let photoSettings = AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String: Int(875704422)])
 
         // photoOutput 객체의 capturePhoto 메서드를 호출하여 캡처 수행
         photoOutput.capturePhoto(with: photoSettings, delegate: self)
@@ -311,21 +310,30 @@ extension MainViewController {
         APIClient.shared.imageCaptioning.requestImage(imageRequest) { [weak self] result in
             switch result {
             case .success(let tts):
-                let alertController = UIAlertController(title: "경고", message: "\(tts.text)", preferredStyle: .alert)
+                self?.endTime = DispatchTime.now()
+                let elapsedTime = (self?.endTime.uptimeNanoseconds ?? 0) - (self?.startTime.uptimeNanoseconds ?? 0)
+                let alertController = UIAlertController(title: "경과시간", message: "\(Double(elapsedTime)/1000000000)초", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
                 alertController.addAction(cancelAction)
                 DispatchQueue.main.async {
+                    DispatchQueue.global().async {
+                        self?.session.startRunning()
+                    }
                     let utterance = AVSpeechUtterance(string: tts.text)
                     self?.synthesizer.speak(utterance)
                     self?.present(alertController, animated: true)
+                    if let capturedImageView = self?.view.viewWithTag(999) {
+                        capturedImageView.removeFromSuperview()
+                    }
                 }
-                
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
                 let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
                 alertController.addAction(cancelAction)
-                self?.present(alertController, animated: true)
+                DispatchQueue.main.async {
+                    self?.present(alertController, animated: true)
+                }
             }
         }
     }

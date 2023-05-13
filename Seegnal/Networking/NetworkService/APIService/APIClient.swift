@@ -11,7 +11,9 @@ class APIClient {
     
     static let shared = APIClient()
     
-    let baseURL = "https://seegnal.pythonanywhere.com/api/v1/caption"
+    // V1
+//    let baseURL = "https://seegnal.pythonanywhere.com/api/v1/caption"
+    let baseURL = "https://seegnal.pythonanywhere.com/api/v2/caption_kr"
     
     class ImageCaptioning {
         

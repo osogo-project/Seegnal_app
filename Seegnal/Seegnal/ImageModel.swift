@@ -13,7 +13,7 @@ struct ImageRequest: Codable {
     let image: Data
     
     init(image: UIImage) {
-        self.image = image.jpegData(compressionQuality: 0.8)!
+        self.image = image.jpegData(compressionQuality: 0.5)!
     }
     
     func getImage() -> UIImage? {
