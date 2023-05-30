@@ -9,13 +9,15 @@
 /* Begin PBXBuildFile section */
 		783F39F429EA5F3A00D8424D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F329EA5F3A00D8424D /* AppDelegate.swift */; };
 		783F39F629EA5F3A00D8424D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F529EA5F3A00D8424D /* SceneDelegate.swift */; };
-		783F39F829EA5F3A00D8424D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F729EA5F3A00D8424D /* MainViewController.swift */; };
+		783F39F829EA5F3A00D8424D /* CaptioningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F729EA5F3A00D8424D /* CaptioningViewController.swift */; };
 		783F39FD29EA5F3A00D8424D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 783F39FC29EA5F3A00D8424D /* Assets.xcassets */; };
 		783F3A0029EA5F3A00D8424D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 783F39FE29EA5F3A00D8424D /* LaunchScreen.storyboard */; };
 		783F3A0B29EA5F3A00D8424D /* SeegnalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F3A0A29EA5F3A00D8424D /* SeegnalTests.swift */; };
 		783F3A1529EA5F3A00D8424D /* SeegnalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F3A1429EA5F3A00D8424D /* SeegnalUITests.swift */; };
 		783F3A1729EA5F3A00D8424D /* SeegnalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F3A1629EA5F3A00D8424D /* SeegnalUITestsLaunchTests.swift */; };
 		783F3A2529EA64F300D8424D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783F3A2429EA64F300D8424D /* AVFoundation.framework */; };
+		788B58002A263F16000345A2 /* OCRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788B57FF2A263F16000345A2 /* OCRViewController.swift */; };
+		788B58022A263F47000345A2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788B58012A263F47000345A2 /* HomeViewController.swift */; };
 		789ADAC429FD000800D62292 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC329FD000800D62292 /* ImageModel.swift */; };
 		789ADAC629FD030E00D62292 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC529FD030E00D62292 /* InfoViewController.swift */; };
 		78BF0EB92A0E1EBB00A35A7C /* URLResponseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BF0EB82A0E1EBB00A35A7C /* URLResponseProtocol.swift */; };
@@ -33,6 +35,8 @@
 		78BF0ED72A0E24E600A35A7C /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BF0ED62A0E24E600A35A7C /* APIClient.swift */; };
 		78BF0ED92A0E254200A35A7C /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BF0ED82A0E254200A35A7C /* Dispatcher.swift */; };
 		78BF0EDB2A0E255600A35A7C /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BF0EDA2A0E255600A35A7C /* Error.swift */; };
+		78F1176F2A15159300779B83 /* Replicate in Frameworks */ = {isa = PBXBuildFile; productRef = 78F1176E2A15159300779B83 /* Replicate */; };
+		78F117712A1517CA00779B83 /* ReplicateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F117702A1517CA00779B83 /* ReplicateModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +60,7 @@
 		783F39F029EA5F3A00D8424D /* Seegnal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seegnal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		783F39F329EA5F3A00D8424D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		783F39F529EA5F3A00D8424D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		783F39F729EA5F3A00D8424D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		783F39F729EA5F3A00D8424D /* CaptioningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptioningViewController.swift; sourceTree = "<group>"; };
 		783F39FC29EA5F3A00D8424D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		783F39FF29EA5F3A00D8424D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		783F3A0129EA5F3A00D8424D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 		783F3A1429EA5F3A00D8424D /* SeegnalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeegnalUITests.swift; sourceTree = "<group>"; };
 		783F3A1629EA5F3A00D8424D /* SeegnalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeegnalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		783F3A2429EA64F300D8424D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		788B57FF2A263F16000345A2 /* OCRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRViewController.swift; sourceTree = "<group>"; };
+		788B58012A263F47000345A2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		789ADAC329FD000800D62292 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		789ADAC529FD030E00D62292 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		78BF0EB82A0E1EBB00A35A7C /* URLResponseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponseProtocol.swift; sourceTree = "<group>"; };
@@ -83,6 +89,7 @@
 		78BF0ED62A0E24E600A35A7C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		78BF0ED82A0E254200A35A7C /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		78BF0EDA2A0E255600A35A7C /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		78F117702A1517CA00779B83 /* ReplicateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplicateModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78F1176F2A15159300779B83 /* Replicate in Frameworks */,
 				783F3A2529EA64F300D8424D /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,9 +146,12 @@
 			children = (
 				783F39F329EA5F3A00D8424D /* AppDelegate.swift */,
 				783F39F529EA5F3A00D8424D /* SceneDelegate.swift */,
-				783F39F729EA5F3A00D8424D /* MainViewController.swift */,
+				783F39F729EA5F3A00D8424D /* CaptioningViewController.swift */,
+				788B57FF2A263F16000345A2 /* OCRViewController.swift */,
+				788B58012A263F47000345A2 /* HomeViewController.swift */,
 				789ADAC529FD030E00D62292 /* InfoViewController.swift */,
 				789ADAC329FD000800D62292 /* ImageModel.swift */,
+				78F117702A1517CA00779B83 /* ReplicateModel.swift */,
 				783F39FC29EA5F3A00D8424D /* Assets.xcassets */,
 				783F39FE29EA5F3A00D8424D /* LaunchScreen.storyboard */,
 				783F3A0129EA5F3A00D8424D /* Info.plist */,
@@ -267,6 +278,9 @@
 			dependencies = (
 			);
 			name = Seegnal;
+			packageProductDependencies = (
+				78F1176E2A15159300779B83 /* Replicate */,
+			);
 			productName = Seegnal;
 			productReference = 783F39F029EA5F3A00D8424D /* Seegnal.app */;
 			productType = "com.apple.product-type.application";
@@ -339,6 +353,9 @@
 				Base,
 			);
 			mainGroup = 783F39E729EA5F3A00D8424D;
+			packageReferences = (
+				78F1176D2A15159300779B83 /* XCRemoteSwiftPackageReference "replicate-swift" */,
+			);
 			productRefGroup = 783F39F129EA5F3A00D8424D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -382,13 +399,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				78BF0EB92A0E1EBB00A35A7C /* URLResponseProtocol.swift in Sources */,
-				783F39F829EA5F3A00D8424D /* MainViewController.swift in Sources */,
+				783F39F829EA5F3A00D8424D /* CaptioningViewController.swift in Sources */,
 				78BF0ECB2A0E243300A35A7C /* URL+.swift in Sources */,
 				78BF0EBD2A0E1EF800A35A7C /* URLSessionTaskProtocol.swift in Sources */,
 				78BF0EC72A0E240F00A35A7C /* Dispatchable.swift in Sources */,
+				788B58002A263F16000345A2 /* OCRViewController.swift in Sources */,
+				788B58022A263F47000345A2 /* HomeViewController.swift in Sources */,
 				789ADAC429FD000800D62292 /* ImageModel.swift in Sources */,
 				78BF0ED72A0E24E600A35A7C /* APIClient.swift in Sources */,
 				783F39F429EA5F3A00D8424D /* AppDelegate.swift in Sources */,
+				78F117712A1517CA00779B83 /* ReplicateModel.swift in Sources */,
 				78BF0ED12A0E247000A35A7C /* JsonParser.swift in Sources */,
 				78BF0EBB2A0E1EE500A35A7C /* URLSessionProtocol.swift in Sources */,
 				783F39F629EA5F3A00D8424D /* SceneDelegate.swift in Sources */,
@@ -734,6 +754,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		78F1176D2A15159300779B83 /* XCRemoteSwiftPackageReference "replicate-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/replicate/replicate-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.12.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		78F1176E2A15159300779B83 /* Replicate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 78F1176D2A15159300779B83 /* XCRemoteSwiftPackageReference "replicate-swift" */;
+			productName = Replicate;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 783F39E829EA5F3A00D8424D /* Project object */;
 }

@@ -21,7 +21,8 @@ class APIClient {
         var jsonParser = JsonParser()
         let dispatcher = Dispatcher(session: URLSession.shared)
 
-        func requestImage(_ imageRequest: ImageRequest, completion: @escaping (Result<ImageResponse>) -> Void) {
+        func requestImage(_ imageRequest: ImageRequest,
+                          completion: @escaping (Result<ImageResponse>) -> Void) {
             
             guard let url = URL(string: APIClient.shared.baseURL) else { return }
             

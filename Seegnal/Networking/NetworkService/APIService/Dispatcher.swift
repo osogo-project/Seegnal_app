@@ -52,6 +52,4 @@ public struct Dispatcher: Dispatchable {
         }
         task.resume()
     }
-    
-    
 }

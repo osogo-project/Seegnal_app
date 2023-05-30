@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +28,32 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     
     var startTime: DispatchTime!
     var endTime: DispatchTime!
+    
+    // MARK: - Replicate
+    
+//    func replicateCall(_ imageRequest: ImageRequest) async {
+//        let replicate = Replicate.Client(token: "e703f82f0d7127588a4bd85d57284c3acb192ae5")
+//        
+//        do {
+//            
+//            let output = try await replicate.run("rmokady/clip_prefix_caption:9a34a6339872a03f45236f114321fb51fc7aa8269d38ae0ce5334969981e4cd8",
+//                                                 input: imageRequest)
+//            
+//            print(output as Any)
+//            
+//            // UIKit 스타일로 변환하여 사용할 수 있습니다
+////            let label = UILabel()
+////            label.text = output
+////            label.font = UIFont.systemFont(ofSize: 14)
+////            label.textColor = UIColor.black
+//            // 기타 레이블의 프레임, 제약 조건 등을 설정해주세요.
+//            // …
+//            
+//            // 뷰 계층에 레이블을 추가하거나 화면에 표시하는 등 원하는대로 사용할 수 있습니다.
+//        } catch {
+//            print("Error: \(error)")
+//        }
+//    }
     
     // MARK: - Variables
     
@@ -167,7 +193,7 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     }
 }
 
-extension MainViewController: AVCapturePhotoCaptureDelegate {
+extension CaptioningViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         // 사진 데이터 처리
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
@@ -207,7 +233,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
 
 // MARK: - Objc function
 
-extension MainViewController {
+extension CaptioningViewController {
     
     // 이미지 캡쳐 메서드
     @objc func captureImage() {
@@ -304,7 +330,7 @@ extension MainViewController {
 
 // MARK: - API call
 
-extension MainViewController {
+extension CaptioningViewController {
     
     private func apiCall(_ imageRequest: ImageRequest) {
         APIClient.shared.imageCaptioning.requestImage(imageRequest) { [weak self] result in
@@ -338,4 +364,3 @@ extension MainViewController {
         }
     }
 }
-
