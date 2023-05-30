@@ -18,32 +18,62 @@ class HomeViewController: UIViewController {
     
     let guideConstant = 10.0
     
-    private let ocrButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("글자 읽기", for: .normal)
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 10
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Seegnal"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textColor = .blue.withAlphaComponent(0.5)
+        label.textAlignment = .center
+        return label
     }()
     
     private let captioningButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("상황 읽기", for: .normal)
-        button.backgroundColor = .red
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.backgroundColor = .white
         button.layer.cornerRadius = 10
+        
+        button.setTitleShadowColor(nil, for: .normal)
+        button.titleLabel?.shadowOffset = CGSize.zero
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOffset = CGSize(width: 3, height: 3)
+        button.layer.shadowRadius = 3
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let ocrButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("글자 읽기", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        
+        button.setTitleShadowColor(nil, for: .normal)
+        button.titleLabel?.shadowOffset = CGSize.zero
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOffset = CGSize(width: 3, height: 3)
+        button.layer.shadowRadius = 3
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.backgroundColor = .black
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
     private func configure() {
+        
+        self.navigationItem.titleView = titleLabel
+        titleLabel.sizeToFit()
+        
         view.addSubview(stackView)
         
         stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: guideConstant).isActive = true

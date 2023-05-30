@@ -127,7 +127,6 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
     func configure() {
         view.addSubview(captureButton)
         view.addSubview(flashbutton)
-//        view.addSubview(zoomButton)
         view.addSubview(switchButton)
         view.addSubview(infoButton)
     }
@@ -194,7 +193,7 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
 }
 
 extension CaptioningViewController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+    internal func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         // 사진 데이터 처리
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
             print("Error: failed to get image data")
@@ -236,7 +235,7 @@ extension CaptioningViewController: AVCapturePhotoCaptureDelegate {
 extension CaptioningViewController {
     
     // 이미지 캡쳐 메서드
-    @objc func captureImage() {
+    @objc private func captureImage() {
         
         // photoSettings 객체 생성
         // [875704422->6.3, 875704438->6.8, 1111970369->6.9]
@@ -247,7 +246,7 @@ extension CaptioningViewController {
     }
     
     // pinchGesture 지원
-    @objc func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
+    @objc private func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
         guard let device = captureDevice else { return }
 
         do {
@@ -264,14 +263,14 @@ extension CaptioningViewController {
         }
     }
     
-    @objc func zoomIn() {
+    @objc private func zoomIn() {
         guard let device = captureDevice else { return }
         try? device.lockForConfiguration()
         device.videoZoomFactor = min(device.videoZoomFactor * 1.5, device.activeFormat.videoMaxZoomFactor)
         device.unlockForConfiguration()
     }
 
-    @objc func zoomOut() {
+    @objc private func zoomOut() {
         guard let device = captureDevice else { return }
         try? device.lockForConfiguration()
         device.videoZoomFactor = max(device.videoZoomFactor / 1.5, 1.0)
@@ -293,7 +292,7 @@ extension CaptioningViewController {
         }
     }
 
-    @objc func switchCamera() {
+    @objc private func switchCamera() {
         // 현재 카메라 위치 가져오기
         guard let currentInput = session.inputs.first as? AVCaptureDeviceInput else { return }
         let currentPosition = currentInput.device.position
@@ -321,7 +320,7 @@ extension CaptioningViewController {
         }
     }
     
-    @objc func infoButtonTapped() {
+    @objc private func infoButtonTapped() {
         let infoVC = InfoViewController()
         self.present(infoVC, animated: true)
     }
