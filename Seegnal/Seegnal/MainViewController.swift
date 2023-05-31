@@ -8,13 +8,14 @@
 import UIKit
 import AVFoundation
 
-class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpCamera()
         setUpTTS()
         configure()
+        configureGesture()
     }
 
     // 카메라 정지
@@ -28,32 +29,6 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
     
     var startTime: DispatchTime!
     var endTime: DispatchTime!
-    
-    // MARK: - Replicate
-    
-//    func replicateCall(_ imageRequest: ImageRequest) async {
-//        let replicate = Replicate.Client(token: "e703f82f0d7127588a4bd85d57284c3acb192ae5")
-//        
-//        do {
-//            
-//            let output = try await replicate.run("rmokady/clip_prefix_caption:9a34a6339872a03f45236f114321fb51fc7aa8269d38ae0ce5334969981e4cd8",
-//                                                 input: imageRequest)
-//            
-//            print(output as Any)
-//            
-//            // UIKit 스타일로 변환하여 사용할 수 있습니다
-////            let label = UILabel()
-////            label.text = output
-////            label.font = UIFont.systemFont(ofSize: 14)
-////            label.textColor = UIColor.black
-//            // 기타 레이블의 프레임, 제약 조건 등을 설정해주세요.
-//            // …
-//            
-//            // 뷰 계층에 레이블을 추가하거나 화면에 표시하는 등 원하는대로 사용할 수 있습니다.
-//        } catch {
-//            print("Error: \(error)")
-//        }
-//    }
     
     // MARK: - Variables
     
@@ -70,17 +45,9 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
     // TTS Speaker
     var synthesizer: AVSpeechSynthesizer!
     
-    // MARK: - Buttons
+    private let buttonTitles = ["상황 읽기", "글자 읽기"]
     
-    // flash button
-    private lazy var flashbutton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "bolt.circle"), for: .normal)
-        button.tintColor = .white
-        button.frame = CGRect(x: view.bounds.origin.x + 20, y: 60, width: 30, height: 30)
-        button.addTarget(self, action: #selector(toggleFlash), for: .touchUpInside)
-        return button
-    }()
+    // MARK: - Buttons
     
     // zoom button -> Scrollable?
     private lazy var zoomButton: UIButton = {
@@ -97,7 +64,7 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath"), for: .normal)
         button.tintColor = .white
-        button.frame = CGRect(x: view.bounds.width - 70, y: view.bounds.height - 90, width: 40, height: 40)
+        button.frame = CGRect(x: view.bounds.width - 70, y: view.bounds.height - 100, width: 40, height: 40)
         button.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
         return button
     }()
@@ -106,7 +73,7 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
     private lazy var captureButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
-        button.frame = CGRect(x: view.bounds.width / 2 - 35, y: view.bounds.height - 100, width: 70, height: 70)
+        button.frame = CGRect(x: view.bounds.width / 2 - 40, y: view.bounds.height - 120, width: 80, height: 80)
         button.tintColor = .white
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
@@ -122,14 +89,82 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
         button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    // MARK: - CollectionView
+    
+    // optionViewCollectionView Cell
+    private lazy var collectionView: UICollectionView = {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+        let sectionSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(200))
+        let section = NSCollectionLayoutSection(group: group)
+        
+        section.orthogonalScrollingBehavior = .paging
+
+
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = false
+        collectionView.register(OptionCollectionViewCell.self, forCellWithReuseIdentifier: "OptionCollectionViewCell")
+        return collectionView
+    }()
     // MARK: - configure
     
     func configure() {
+        view.addSubview(collectionView)
         view.addSubview(captureButton)
-        view.addSubview(flashbutton)
         view.addSubview(switchButton)
         view.addSubview(infoButton)
+        
+        collectionView.topAnchor.constraint(equalTo: infoButton.bottomAnchor).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        collectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25).isActive = true
+        collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
+    
+    func configureGesture() {
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swiped))
+        swipeLeft.direction = .left
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swiped))
+        swipeRight.direction = .right
+        
+        view.addGestureRecognizer(swipeLeft)
+        view.addGestureRecognizer(swipeRight)
+    }
+    
+    @objc func swiped(gesture: UISwipeGestureRecognizer) {
+        guard let visibleCell = collectionView.visibleCells.first,
+              let indexPath = collectionView.indexPath(for: visibleCell) else {
+            return
+        }
+        
+        switch gesture.direction {
+        case .left:
+            let nextIndexPath = IndexPath(item: indexPath.item + 1, section: indexPath.section)
+            if nextIndexPath.item < collectionView.numberOfItems(inSection: indexPath.section) {
+                collectionView.scrollToItem(at: nextIndexPath, at: .centeredHorizontally, animated: true)
+            }
+        case .right:
+            let previousIndexPath = IndexPath(item: indexPath.item - 1, section: indexPath.section)
+            if previousIndexPath.item >= 0 {
+                collectionView.scrollToItem(at: previousIndexPath, at: .centeredHorizontally, animated: true)
+            }
+        default:
+            break
+        }
+    }
+
     
     func setUpCamera() {
         
@@ -192,9 +227,10 @@ class CaptioningViewController: UIViewController, AVCaptureVideoDataOutputSample
     }
 }
 
-extension CaptioningViewController: AVCapturePhotoCaptureDelegate {
+extension MainViewController: AVCapturePhotoCaptureDelegate {
     internal func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         // 사진 데이터 처리
+        
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData) else {
             print("Error: failed to get image data")
             return
@@ -206,33 +242,57 @@ extension CaptioningViewController: AVCapturePhotoCaptureDelegate {
         imageView.tag = 999
         self.view.addSubview(imageView)
         
+        guard let visibleCell = collectionView.visibleCells.first as? OptionCollectionViewCell else {
+                return
+            }
+            
+        // 셀의 텍스트를 가져옵니다.
+        let cellText = visibleCell.optionLabel.text
 
+        // 텍스트에 따라 다른 API를 호출합니다.
+        switch cellText {
+        case "상황 읽기":
+            // imageCaptioning apiCall을 호출합니다.
+            if let image = imageView.image {
+                let imageRequest = ImageRequest(image: image)
+                transApiCall(imageRequest)
+                self.startTime = DispatchTime.now()
+            } else {
+                // 이미지가 nil 일 때, 처리할 코드
+                // 경고창 띄울 예정
+                print("There is Error Try Again")
+            }
+            // 카메라 정지
+            DispatchQueue.global().async {
+                self.session.stopRunning()
+            }
+        case "글자 읽기":
+            // ocr apiCall을 호출합니다.
+            if let image = imageView.image {
+                let imageRequest = ImageRequest(image: image)
+                ocrApiCall(imageRequest)
+                self.startTime = DispatchTime.now()
+            } else {
+                // 이미지가 nil 일 때, 처리할 코드
+                // 경고창 띄울 예정
+                print("There is Error Try Again")
+            }
+            // 카메라 정지
+            DispatchQueue.global().async {
+                self.session.stopRunning()
+            }
+        default:
+            print("Invalid option")
+        }
         
-        if let image = imageView.image {
-            //        if let imageData = image.jpegData(compressionQuality: 0.5) {
-            //            let imageRequest = ImageRequest(image: image)
-            //            apiCall(imageRequest)
-            //            self.startTime = DispatchTime.now()
-            //        }
-            let imageRequest = ImageRequest(image: image)
-            apiCall(imageRequest)
-            self.startTime = DispatchTime.now()
-        } else {
-            // 이미지가 nil 일 때, 처리할 코드
-            // 경고창 띄울 예정
-            print("There is Error Try Again")
-        }
-        // 카메라 정지
-        DispatchQueue.global().async {
-            self.session.stopRunning()
-        }
+        
     }
 }
 
 
 // MARK: - Objc function
 
-extension CaptioningViewController {
+extension MainViewController {
     
     // 이미지 캡쳐 메서드
     @objc private func captureImage() {
@@ -329,9 +389,9 @@ extension CaptioningViewController {
 
 // MARK: - API call
 
-extension CaptioningViewController {
+extension MainViewController {
     
-    private func apiCall(_ imageRequest: ImageRequest) {
+    private func transApiCall(_ imageRequest: ImageRequest) {
         APIClient.shared.imageCaptioning.requestImage(imageRequest) { [weak self] result in
             switch result {
             case .success(let tts):
@@ -362,4 +422,63 @@ extension CaptioningViewController {
             }
         }
     }
+    
+    private func ocrApiCall(_ imageRequest: ImageRequest) {
+        APIClient.shared.ocr.requestImage(imageRequest) { [weak self] result in
+            switch result {
+            case .success(let tts):
+                self?.endTime = DispatchTime.now()
+                let elapsedTime = (self?.endTime.uptimeNanoseconds ?? 0) - (self?.startTime.uptimeNanoseconds ?? 0)
+                let alertController = UIAlertController(title: "경과시간", message: "\(Double(elapsedTime)/1000000000)초", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                DispatchQueue.main.async {
+                    DispatchQueue.global().async {
+                        self?.session.startRunning()
+                    }
+                    let utterance = AVSpeechUtterance(string: tts.text)
+                    self?.synthesizer.speak(utterance)
+                    self?.present(alertController, animated: true)
+                    if let capturedImageView = self?.view.viewWithTag(999) {
+                        capturedImageView.removeFromSuperview()
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                DispatchQueue.main.async {
+                    self?.present(alertController, animated: true)
+                }
+            }
+        }
+    }
+}
+
+extension MainViewController: UICollectionViewDelegate {
+    
+}
+
+extension MainViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return buttonTitles.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OptionCollectionViewCell", for: indexPath) as! OptionCollectionViewCell
+        cell.configure(with: buttonTitles[indexPath.item])
+        return cell
+    }
+    
+    func visibleCellInfo() {
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            if let cell = collectionView.cellForItem(at: indexPath) as? OptionCollectionViewCell {
+                // indexPath와 cell을 사용하여 원하는 작업 수행
+            }
+        }
+    }
+
 }

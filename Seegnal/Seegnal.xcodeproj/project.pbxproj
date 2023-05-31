@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		783F39F429EA5F3A00D8424D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F329EA5F3A00D8424D /* AppDelegate.swift */; };
 		783F39F629EA5F3A00D8424D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F529EA5F3A00D8424D /* SceneDelegate.swift */; };
-		783F39F829EA5F3A00D8424D /* CaptioningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F729EA5F3A00D8424D /* CaptioningViewController.swift */; };
+		783F39F829EA5F3A00D8424D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F39F729EA5F3A00D8424D /* MainViewController.swift */; };
 		783F39FD29EA5F3A00D8424D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 783F39FC29EA5F3A00D8424D /* Assets.xcassets */; };
 		783F3A0029EA5F3A00D8424D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 783F39FE29EA5F3A00D8424D /* LaunchScreen.storyboard */; };
 		783F3A0B29EA5F3A00D8424D /* SeegnalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F3A0A29EA5F3A00D8424D /* SeegnalTests.swift */; };
@@ -17,7 +17,8 @@
 		783F3A1729EA5F3A00D8424D /* SeegnalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783F3A1629EA5F3A00D8424D /* SeegnalUITestsLaunchTests.swift */; };
 		783F3A2529EA64F300D8424D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 783F3A2429EA64F300D8424D /* AVFoundation.framework */; };
 		788B58002A263F16000345A2 /* OCRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788B57FF2A263F16000345A2 /* OCRViewController.swift */; };
-		788B58022A263F47000345A2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788B58012A263F47000345A2 /* HomeViewController.swift */; };
+		788B58042A271FCB000345A2 /* OptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788B58032A271FCB000345A2 /* OptionCollectionViewCell.swift */; };
+		788B58062A273F31000345A2 /* IndexPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788B58052A273F31000345A2 /* IndexPath.swift */; };
 		789ADAC429FD000800D62292 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC329FD000800D62292 /* ImageModel.swift */; };
 		789ADAC629FD030E00D62292 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789ADAC529FD030E00D62292 /* InfoViewController.swift */; };
 		78BF0EB92A0E1EBB00A35A7C /* URLResponseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BF0EB82A0E1EBB00A35A7C /* URLResponseProtocol.swift */; };
@@ -60,7 +61,7 @@
 		783F39F029EA5F3A00D8424D /* Seegnal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seegnal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		783F39F329EA5F3A00D8424D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		783F39F529EA5F3A00D8424D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		783F39F729EA5F3A00D8424D /* CaptioningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptioningViewController.swift; sourceTree = "<group>"; };
+		783F39F729EA5F3A00D8424D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		783F39FC29EA5F3A00D8424D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		783F39FF29EA5F3A00D8424D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		783F3A0129EA5F3A00D8424D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -71,7 +72,8 @@
 		783F3A1629EA5F3A00D8424D /* SeegnalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeegnalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		783F3A2429EA64F300D8424D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		788B57FF2A263F16000345A2 /* OCRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRViewController.swift; sourceTree = "<group>"; };
-		788B58012A263F47000345A2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		788B58032A271FCB000345A2 /* OptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCollectionViewCell.swift; sourceTree = "<group>"; };
+		788B58052A273F31000345A2 /* IndexPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexPath.swift; sourceTree = "<group>"; };
 		789ADAC329FD000800D62292 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		789ADAC529FD030E00D62292 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		78BF0EB82A0E1EBB00A35A7C /* URLResponseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLResponseProtocol.swift; sourceTree = "<group>"; };
@@ -146,9 +148,9 @@
 			children = (
 				783F39F329EA5F3A00D8424D /* AppDelegate.swift */,
 				783F39F529EA5F3A00D8424D /* SceneDelegate.swift */,
-				783F39F729EA5F3A00D8424D /* CaptioningViewController.swift */,
+				783F39F729EA5F3A00D8424D /* MainViewController.swift */,
+				788B58032A271FCB000345A2 /* OptionCollectionViewCell.swift */,
 				788B57FF2A263F16000345A2 /* OCRViewController.swift */,
-				788B58012A263F47000345A2 /* HomeViewController.swift */,
 				789ADAC529FD030E00D62292 /* InfoViewController.swift */,
 				789ADAC329FD000800D62292 /* ImageModel.swift */,
 				78F117702A1517CA00779B83 /* ReplicateModel.swift */,
@@ -232,6 +234,7 @@
 			children = (
 				78BF0ECA2A0E243300A35A7C /* URL+.swift */,
 				78BF0ECD2A0E245500A35A7C /* URLResponse+.swift */,
+				788B58052A273F31000345A2 /* IndexPath.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -399,13 +402,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				78BF0EB92A0E1EBB00A35A7C /* URLResponseProtocol.swift in Sources */,
-				783F39F829EA5F3A00D8424D /* CaptioningViewController.swift in Sources */,
+				783F39F829EA5F3A00D8424D /* MainViewController.swift in Sources */,
 				78BF0ECB2A0E243300A35A7C /* URL+.swift in Sources */,
 				78BF0EBD2A0E1EF800A35A7C /* URLSessionTaskProtocol.swift in Sources */,
 				78BF0EC72A0E240F00A35A7C /* Dispatchable.swift in Sources */,
 				788B58002A263F16000345A2 /* OCRViewController.swift in Sources */,
-				788B58022A263F47000345A2 /* HomeViewController.swift in Sources */,
 				789ADAC429FD000800D62292 /* ImageModel.swift in Sources */,
+				788B58062A273F31000345A2 /* IndexPath.swift in Sources */,
 				78BF0ED72A0E24E600A35A7C /* APIClient.swift in Sources */,
 				783F39F429EA5F3A00D8424D /* AppDelegate.swift in Sources */,
 				78F117712A1517CA00779B83 /* ReplicateModel.swift in Sources */,
@@ -416,6 +419,7 @@
 				78BF0EC12A0E1F1D00A35A7C /* NetworkSeperatable.swift in Sources */,
 				78BF0ECE2A0E245500A35A7C /* URLResponse+.swift in Sources */,
 				78BF0ED92A0E254200A35A7C /* Dispatcher.swift in Sources */,
+				788B58042A271FCB000345A2 /* OptionCollectionViewCell.swift in Sources */,
 				789ADAC629FD030E00D62292 /* InfoViewController.swift in Sources */,
 				78BF0EC32A0E1F3300A35A7C /* RequestMakable.swift in Sources */,
 				78BF0EBF2A0E1F0A00A35A7C /* HTTPMethod.swift in Sources */,

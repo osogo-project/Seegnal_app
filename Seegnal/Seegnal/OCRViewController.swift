@@ -173,11 +173,6 @@ extension OCRViewController: AVCapturePhotoCaptureDelegate {
 
         
         if let image = imageView.image {
-            //        if let imageData = image.jpegData(compressionQuality: 0.5) {
-            //            let imageRequest = ImageRequest(image: image)
-            //            apiCall(imageRequest)
-            //            self.startTime = DispatchTime.now()
-            //        }
             let imageRequest = ImageRequest(image: image)
             apiCall(imageRequest)
             self.startTime = DispatchTime.now()
