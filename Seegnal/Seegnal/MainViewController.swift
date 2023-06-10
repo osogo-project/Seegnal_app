@@ -27,6 +27,8 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     }
     // MARK: - Timer For Peformance Test
     
+    let speechSynthesizer = AVSpeechSynthesizer()
+    
     var startTime: DispatchTime!
     var endTime: DispatchTime!
     
@@ -45,35 +47,35 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     // TTS Speaker
     var synthesizer: AVSpeechSynthesizer!
     
-    private let buttonTitles = ["상황 읽기", "글자 읽기"]
+    private let buttonTitles = ["상황 인식", "글자 인식"]
     
     // MARK: - Buttons
     
     // zoom button -> Scrollable?
-    private lazy var zoomButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
-        button.tintColor = .white
-        button.frame = CGRect(x: view.bounds.origin.x + 60, y: 60, width: 30, height: 30)
-        button.addTarget(self, action: #selector(zoomIn), for: .touchUpInside)
-        return button
-    }()
-    
-    // switch side
-    private lazy var switchButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath"), for: .normal)
-        button.tintColor = .white
-        button.frame = CGRect(x: view.bounds.width - 70, y: view.bounds.height - 100, width: 40, height: 40)
-        button.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
-        return button
-    }()
+//    private lazy var zoomButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
+//        button.tintColor = .white
+//        button.frame = CGRect(x: view.bounds.origin.x + 60, y: 60, width: 30, height: 30)
+//        button.addTarget(self, action: #selector(zoomIn), for: .touchUpInside)
+//        return button
+//    }()
+//
+//    // switch side
+//    private lazy var switchButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setImage(UIImage(systemName: "arrow.triangle.2.circlepath"), for: .normal)
+//        button.tintColor = .white
+//        button.frame = CGRect(x: view.bounds.width - 70, y: view.bounds.height - 100, width: 40, height: 40)
+//        button.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
+//        return button
+//    }()
     
     // 캡처 버튼 추가
     private lazy var captureButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "button.programmable"), for: .normal)
-        button.frame = CGRect(x: view.bounds.width / 2 - 40, y: view.bounds.height - 120, width: 80, height: 80)
+        button.frame = CGRect(x: view.bounds.width / 2 - 60, y: view.bounds.height - 140, width: 120, height: 120)
         button.tintColor = .white
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
@@ -81,15 +83,15 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         return button
     }()
     
-    private lazy var infoButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
-        button.frame = CGRect(x: view.bounds.width - 40, y: 60, width: 30, height: 30)
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    
+//    private lazy var infoButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
+//        button.frame = CGRect(x: view.bounds.width - 40, y: 60, width: 30, height: 30)
+//        button.tintColor = .white
+//        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+//        return button
+//    }()
+
     // MARK: - CollectionView
     
     // optionViewCollectionView Cell
@@ -123,10 +125,10 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     func configure() {
         view.addSubview(collectionView)
         view.addSubview(captureButton)
-        view.addSubview(switchButton)
-        view.addSubview(infoButton)
+//        view.addSubview(switchButton)
+//        view.addSubview(infoButton)
         
-        collectionView.topAnchor.constraint(equalTo: infoButton.bottomAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         collectionView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25).isActive = true
         collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -144,24 +146,43 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     }
     
     @objc func swiped(gesture: UISwipeGestureRecognizer) {
-        guard let visibleCell = collectionView.visibleCells.first,
+        guard let visibleCell = collectionView.visibleCells.first as? OptionCollectionViewCell,
               let indexPath = collectionView.indexPath(for: visibleCell) else {
             return
         }
+        
+        var targetIndexPath: IndexPath?
         
         switch gesture.direction {
         case .left:
             let nextIndexPath = IndexPath(item: indexPath.item + 1, section: indexPath.section)
             if nextIndexPath.item < collectionView.numberOfItems(inSection: indexPath.section) {
                 collectionView.scrollToItem(at: nextIndexPath, at: .centeredHorizontally, animated: true)
+                targetIndexPath = nextIndexPath
             }
+            
         case .right:
             let previousIndexPath = IndexPath(item: indexPath.item - 1, section: indexPath.section)
             if previousIndexPath.item >= 0 {
                 collectionView.scrollToItem(at: previousIndexPath, at: .centeredHorizontally, animated: true)
+                targetIndexPath = previousIndexPath
             }
         default:
             break
+        }
+        
+        if let targetIndexPath = targetIndexPath,
+           let targetCell = collectionView.cellForItem(at: targetIndexPath) as? OptionCollectionViewCell {
+
+            let cellTitle = targetCell.optionLabel.text
+
+            // Stop the previous utterance before speaking the new one
+            if speechSynthesizer.isSpeaking {
+                speechSynthesizer.stopSpeaking(at: .immediate)
+            }
+
+            let speechUtterance = AVSpeechUtterance(string: cellTitle ?? "")
+            speechSynthesizer.speak(speechUtterance)
         }
     }
 
@@ -251,7 +272,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
 
         // 텍스트에 따라 다른 API를 호출합니다.
         switch cellText {
-        case "상황 읽기":
+        case "상황 인식":
             // imageCaptioning apiCall을 호출합니다.
             if let image = imageView.image {
                 let imageRequest = ImageRequest(image: image)
@@ -266,7 +287,7 @@ extension MainViewController: AVCapturePhotoCaptureDelegate {
             DispatchQueue.global().async {
                 self.session.stopRunning()
             }
-        case "글자 읽기":
+        case "글자 인식":
             // ocr apiCall을 호출합니다.
             if let image = imageView.image {
                 let imageRequest = ImageRequest(image: image)
@@ -392,63 +413,67 @@ extension MainViewController {
 extension MainViewController {
     
     private func transApiCall(_ imageRequest: ImageRequest) {
+        // 로딩 인디케이터 생성 및 보이기
+        let loadingIndicator = UIActivityIndicatorView(style: .large)
+        loadingIndicator.center = self.view.center
+        loadingIndicator.startAnimating()
+        self.view.addSubview(loadingIndicator)
+
         APIClient.shared.imageCaptioning.requestImage(imageRequest) { [weak self] result in
-            switch result {
-            case .success(let tts):
-                self?.endTime = DispatchTime.now()
-                let elapsedTime = (self?.endTime.uptimeNanoseconds ?? 0) - (self?.startTime.uptimeNanoseconds ?? 0)
-                let alertController = UIAlertController(title: "경과시간", message: "\(Double(elapsedTime)/1000000000)초", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                // API 호출이 완료되면 로딩 인디케이터 숨기기
+                loadingIndicator.stopAnimating()
+                loadingIndicator.removeFromSuperview()
+                
+                switch result {
+                case .success(let tts):
                     DispatchQueue.global().async {
                         self?.session.startRunning()
                     }
                     let utterance = AVSpeechUtterance(string: tts.text)
                     self?.synthesizer.speak(utterance)
-                    self?.present(alertController, animated: true)
                     if let capturedImageView = self?.view.viewWithTag(999) {
                         capturedImageView.removeFromSuperview()
                     }
-                }
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-                let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                DispatchQueue.main.async {
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                    let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                    alertController.addAction(cancelAction)
                     self?.present(alertController, animated: true)
                 }
             }
         }
     }
+
     
     private func ocrApiCall(_ imageRequest: ImageRequest) {
+        
+        let loadingIndicator = UIActivityIndicatorView(style: .large)
+        loadingIndicator.center = self.view.center
+        loadingIndicator.startAnimating()
+        self.view.addSubview(loadingIndicator)
+        
         APIClient.shared.ocr.requestImage(imageRequest) { [weak self] result in
-            switch result {
-            case .success(let tts):
-                self?.endTime = DispatchTime.now()
-                let elapsedTime = (self?.endTime.uptimeNanoseconds ?? 0) - (self?.startTime.uptimeNanoseconds ?? 0)
-                let alertController = UIAlertController(title: "경과시간", message: "\(Double(elapsedTime)/1000000000)초", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                loadingIndicator.stopAnimating()
+                loadingIndicator.removeFromSuperview()
+
+                switch result {
+                case .success(let tts):
                     DispatchQueue.global().async {
                         self?.session.startRunning()
                     }
                     let utterance = AVSpeechUtterance(string: tts.text)
                     self?.synthesizer.speak(utterance)
-                    self?.present(alertController, animated: true)
                     if let capturedImageView = self?.view.viewWithTag(999) {
                         capturedImageView.removeFromSuperview()
                     }
-                }
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-                let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                DispatchQueue.main.async {
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                    let alertController = UIAlertController(title: "경고", message: "오류가 발생했습니다. 다시 시도하세요", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                    alertController.addAction(cancelAction)
                     self?.present(alertController, animated: true)
                 }
             }

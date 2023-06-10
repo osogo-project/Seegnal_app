@@ -12,7 +12,6 @@ class APIClient {
     static let shared = APIClient()
     
     // V1
-//    let baseURL = "https://seegnal.pythonanywhere.com/api/v1/caption"
     let baseURL = "https://seegnal.pythonanywhere.com/api/v2/caption_kr"
     let ocrURL = "https://oshmos.pythonanywhere.com/api/v2/ocr_kr"
     
